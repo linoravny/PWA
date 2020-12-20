@@ -1,0 +1,41 @@
+<div class="drawingBoardCanvas">
+    <h1>Hi {{userName}},</h1>
+    <p>You can start to paint on your canvas</p>
+    
+    <!-- <div class="row">
+        <div class="col-sm-12">
+            <select class="custom-select" 
+            (change)="selectColorChange($event.target.value)">
+                <option selected>Choose...</option>
+                <option *ngFor="let color of colorList" [value]="color">{{color}}</option>
+            </select>
+        </div>
+    </div> -->
+    <div class="row">
+        <div class="col-12 col-md-4">
+            <div class="color-picker">
+                <div class="summary-info">
+                    <span>open color picker</span>
+                    <div class="circle" [ngStyle]="{'background': color}"
+                    (click)="colorPickerIsOpen = !colorPickerIsOpen">
+                    </div>
+                </div>
+                <div class="color-picker-box" *ngIf="colorPickerIsOpen">
+                    <div class="colors row">
+                        <div *ngFor="let paint of defaultColors" 
+                            class="col-3 col-md-3">
+                            <div class="circle" (click)="changeColor(paint)"
+                            [ngClass]="{'active': color === paint}"
+                            [ngStyle]="{'background': paint}"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div #canvasContainer class="col-12 col-md-8">
+            <canvas #canvas></canvas>
+        </div>
+    </div>
+
+   
+</div>

@@ -7,7 +7,7 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
-          "style": "sass"
+          "style": "scss"
         }
       },
       "root": "",
@@ -29,7 +29,7 @@
               "src/manifest.webmanifest"
             ],
             "styles": [
-              "src/styles.sass"
+              "src/scss/styles.scss"
             ],
             "scripts": []
           },
@@ -95,7 +95,7 @@
               "src/manifest.webmanifest"
             ],
             "styles": [
-              "src/styles.sass"
+              "src/scss/styles.scss"
             ],
             "scripts": []
           }
@@ -128,5 +128,10 @@
       }
     }
   },
-  "defaultProject": "pwa-angular-app"
+  "defaultProject": "pwa-angular-app",
+  "schematics": {
+    "@schematics/angular:component": {
+      "styleext": "scss"
+    }
+  }
 }

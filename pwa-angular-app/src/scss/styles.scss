@@ -1,0 +1,23 @@
+// src/scss/styles.scss
+
+
+@import "~../../node_modules/bootstrap/dist/css/bootstrap.min.css";
+@import './variables';
+@import './mixins';
+
+body {
+  font: 100% $font-stack;
+  background-color: $color-pink-1;
+    .shell-content {
+      position: relative;
+      top: calc(#{$main-header-height} + #{$main-header-padding});
+      padding: 10px 15px;
+    }
+    .shell-header {
+      height: $main-header-height;
+      padding-top: $main-header-padding;
+      padding-bottom: $main-header-padding;
+    }
+}
+
+

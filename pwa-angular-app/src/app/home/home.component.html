@@ -1,0 +1,19 @@
+<p>Select Game</p>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <ngb-carousel>  
+                <ng-template ngbSlide *ngFor="let item of cards; let i = index">  
+                    <img [src]="item.img">  
+                    <div class="carousel-caption">  
+                        <h3>{{item.title}}</h3>  
+                    </div>  
+                </ng-template>  
+            </ngb-carousel>  
+        </div>
+    </div>
+</div>  
+
+
+
