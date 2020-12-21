@@ -2,7 +2,17 @@ import {
   Component, OnInit, Input, ElementRef, AfterViewInit, ViewChild, Output, EventEmitter,
 } from '@angular/core';
 import { fromEvent, merge } from 'rxjs';
-import { switchMap, takeUntil, pairwise, skipUntil, repeat, mergeMap } from 'rxjs/operators'
+import { switchMap, takeUntil, pairwise, skipUntil, repeat, mergeMap, map } from 'rxjs/operators'
+
+//to do
+// clear all canvas
+// update version - service worker
+// touch mobile events
+// clear part of the canvas by touch
+// images for paint
+//max with + hight for canvas
+// animation
+// css
 
 @Component({
   selector: 'app-drawing-board-canvas',
@@ -17,9 +27,8 @@ export class DrawingBoardCanvasComponent implements OnInit {
   }
 
   @ViewChild('canvas') public canvas: ElementRef;
-
   @ViewChild('canvasContainer') canvasElementView: ElementRef;
-  @Input() public width = 100;
+  //@Input() public width = 100;
   @Input() public height = 500;
 
   userName: string = 'Omer';
@@ -64,7 +73,7 @@ export class DrawingBoardCanvasComponent implements OnInit {
 
     this.cx.lineWidth = 3;
     this.cx.lineCap = 'round';
-    this.cx.strokeStyle = '#9d8594';
+    this.cx.strokeStyle = '#ffffff';
 
     this.captureEvents(canvasEl);
   }
@@ -72,58 +81,55 @@ export class DrawingBoardCanvasComponent implements OnInit {
   private captureEvents(canvasEl: HTMLCanvasElement) {
     // this will capture all mouse + touch events from the canvas element
 
-    const down$ = merge(
-      fromEvent(canvasEl, 'mousedown'),
-      fromEvent(canvasEl, 'touchstart'));
-    
-    const up$ = merge(
-      fromEvent(canvasEl, 'mouseup'),
-      fromEvent(canvasEl, 'touchend'));
+    const mouseEventToCoordinate = mouseEvent => {
+      mouseEvent.preventDefault();
+      return {
+        x: mouseEvent.clientX, 
+        y: mouseEvent.clientY
+      };
+    };
+  
+    const touchEventToCoordinate = touchEvent => {
+      touchEvent.preventDefault();
+      return {
+        x: touchEvent.changedTouches[0].clientX, 
+        y: touchEvent.changedTouches[0].clientY
+      };
+    };
 
-    const cancle$ = merge(
-      fromEvent(canvasEl, 'mouseleave'),
-      fromEvent(canvasEl, 'touchcancel'));
-    
-    const move$ = merge(
-      fromEvent(canvasEl, 'mousemove'),
-      fromEvent(canvasEl, 'touchmove'));
+    const mouseDowns = fromEvent(canvasEl, "mousedown").pipe(map(mouseEventToCoordinate));
+    const mouseMoves = fromEvent(canvasEl, "mousemove").pipe(map(mouseEventToCoordinate));
+    const mouseUps = fromEvent(canvasEl, "mouseup").pipe(map(mouseEventToCoordinate));
+  
+    const touchStarts = fromEvent(canvasEl, "touchstart").pipe(map(touchEventToCoordinate));
+    const touchMoves = fromEvent(canvasEl, "touchmove").pipe(map(touchEventToCoordinate));
+    const touchEnds = fromEvent(canvasEl, "touchend").pipe(map(touchEventToCoordinate));
+
+    const down$ = merge(mouseDowns,touchStarts);
+    const move$ = merge(mouseMoves, touchMoves);
+    const end$ = merge(mouseUps, touchEnds);
 
     down$
       .pipe(
         mergeMap(down => move$.pipe(
-            takeUntil(up$),
-            takeUntil(cancle$),
+            takeUntil(end$),
             pairwise()
           )
         )
-        // switchMap((e) => {
-        //   // after a mouse down, we'll record all mouse moves
-        //   return move$
-        //     .pipe(
-              
-        //       // we'll stop (and unsubscribe) once the user releases the mouse
-        //       // this will trigger a 'mouseup' event    
-        //       takeUntil(up$),
-        //       // we'll also stop (and unsubscribe) once the mouse leaves the canvas (mouseleave event)
-        //       takeUntil(cancle$),
-        //       // pairwise lets us get the previous value to draw a line from
-        //       // the previous point to the current point    
-        //       pairwise()
-        //     )
-        // })
       )
       .subscribe((res: [MouseEvent, MouseEvent]) => {
+        
         const rect = canvasEl.getBoundingClientRect();
   
         // previous and current position with the offset
         const prevPos = {
-          x: res[0].clientX - rect.left,
-          y: res[0].clientY - rect.top
+          x: res[0].x - rect.left,
+          y: res[0].y - rect.top
         };
   
         const currentPos = {
-          x: res[1].clientX - rect.left,
-          y: res[1].clientY - rect.top
+          x: res[1].x - rect.left,
+          y: res[1].y - rect.top
         };
   
         // this method we'll implement soon to do the actual drawing

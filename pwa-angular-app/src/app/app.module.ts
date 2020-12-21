@@ -7,7 +7,8 @@ import { AppComponent } from './app.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';  
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap'; 
+//import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 
 import { DrawingBoardCanvasComponent } from './drawing-board-canvas/drawing-board-canvas.component';
 import { HomeComponent } from './home/home.component';
