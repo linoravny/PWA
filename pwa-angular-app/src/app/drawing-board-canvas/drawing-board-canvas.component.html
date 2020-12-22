@@ -1,6 +1,5 @@
 <div class="drawingBoardCanvas">
     <h1>Hi {{userName}},</h1>
-    <p>You can start to paint on your canvas</p>
     
     <!-- <div class="row">
         <div class="col-sm-12">
@@ -12,13 +11,12 @@
         </div>
     </div> -->
     <div class="row">
-        <div class="col-12 col-md-2">
+        <div class="col-12">
             <div class="color-picker">
-                <div class="summary-info">
-                    <span>open color picker</span>
-                    <div class="circle" [ngStyle]="{'background': color}"
-                    (click)="colorPickerIsOpen = !colorPickerIsOpen">
-                    </div>
+                <div class="summary-info row">
+                    <div class="circle active" [ngStyle]="{'background': color}"
+                    (click)="colorPickerIsOpen = !colorPickerIsOpen"></div>
+                    <!-- <div class="">Select</div> -->
                 </div>
                 <div class="color-picker-box" *ngIf="colorPickerIsOpen">
                     <div class="colors row">
@@ -32,7 +30,9 @@
                 </div>
             </div>
         </div>
-        <div #canvasContainer class="col-12 col-md-10">
+    </div>
+    <div class="row">
+        <div #canvasContainer class="col-12">
             <canvas #canvas></canvas>
         </div>
     </div>

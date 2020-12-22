@@ -1,30 +1,19 @@
 import {
-  Component, OnInit, Input, ElementRef, AfterViewInit, ViewChild, Output, EventEmitter,
+  Component, OnInit, Input, ElementRef, ViewChild, Output, EventEmitter, HostListener, OnDestroy,
 } from '@angular/core';
-import { fromEvent, merge } from 'rxjs';
+import { Router } from '@angular/router';
+import { fromEvent, merge, Observable, Subscription } from 'rxjs';
 import { switchMap, takeUntil, pairwise, skipUntil, repeat, mergeMap, map } from 'rxjs/operators'
 
-//to do
-// clear all canvas
-// update version - service worker
-// touch mobile events
-// clear part of the canvas by touch
-// images for paint
-//max with + hight for canvas
-// animation
-// css
 
 @Component({
   selector: 'app-drawing-board-canvas',
   templateUrl: './drawing-board-canvas.component.html',
   styleUrls: ['./drawing-board-canvas.component.scss']
 })
-export class DrawingBoardCanvasComponent implements OnInit {
+export class DrawingBoardCanvasComponent implements OnInit, OnDestroy {
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
+  constructor(private router: Router) { }
 
   @ViewChild('canvas') public canvas: ElementRef;
   @ViewChild('canvasContainer') canvasElementView: ElementRef;
@@ -59,10 +48,20 @@ export class DrawingBoardCanvasComponent implements OnInit {
     '#c97545',
     '#c1800b'
   ];
-  color: string = '#ffffff';
-  colorPickerIsOpen:boolean = false;
+  color: string = '#000105';
+  colorPickerIsOpen:boolean = true;
 
   private cx: CanvasRenderingContext2D;
+
+  resizeObservable$: Observable<Event>;
+  resizeSubscription$: Subscription;
+
+  ngOnInit(): void {
+  }
+
+  ngOnDestroy() {
+    this.resizeSubscription$.unsubscribe()
+  }
 
   public ngAfterViewInit() {
     const canvasEl: HTMLCanvasElement = this.canvas.nativeElement;
@@ -71,11 +70,24 @@ export class DrawingBoardCanvasComponent implements OnInit {
     canvasEl.width = this.canvasElementView.nativeElement.offsetWidth;
     canvasEl.height = this.height;
 
-    this.cx.lineWidth = 3;
+    this.cx.lineWidth = 4;
     this.cx.lineCap = 'round';
-    this.cx.strokeStyle = '#ffffff';
+    this.cx.strokeStyle = '#000105';
 
     this.captureEvents(canvasEl);
+
+    // resize app
+    this.resizeObservable$ = fromEvent(window, 'resize')
+    this.resizeSubscription$ = this.resizeObservable$.subscribe( evt => {
+      console.log('window resize! 555!!');
+      //reload page
+      this.router.navigateByUrl('/', {skipLocationChange: true}).then(()=>
+      this.router.navigate(['/drawingBoard']));
+
+      // canvasEl.width = this.canvasElementView.nativeElement.offsetWidth;
+      // canvasEl.height = this.canvasElementView.nativeElement.offsetHeight;
+
+    });
   }
   
   private captureEvents(canvasEl: HTMLCanvasElement) {
@@ -150,9 +162,15 @@ export class DrawingBoardCanvasComponent implements OnInit {
   }
 
   public changeColor(color:string) {
+    if(color === '#ffffff'){
+      this.cx.lineWidth = 60;
+    } else {
+      this.cx.lineWidth = 4;
+    }
     this.color = color;
     this.cx.strokeStyle = color;
     this.colorPickerIsOpen = false;
+    
   }
 
 }

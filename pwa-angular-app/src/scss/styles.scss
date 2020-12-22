@@ -6,8 +6,7 @@
 @import './mixins';
 
 body {
-  font: 100% $font-stack;
-  background-color: $color-pink-1;
+    font: 100% $font-stack;
     .shell-content {
       position: relative;
       top: calc(#{$main-header-height} + #{$main-header-padding});
