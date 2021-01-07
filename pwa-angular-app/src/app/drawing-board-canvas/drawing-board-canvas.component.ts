@@ -55,12 +55,33 @@ export class DrawingBoardCanvasComponent implements OnInit, OnDestroy {
 
   resizeObservable$: Observable<Event>;
   resizeSubscription$: Subscription;
+  orientationObservable$: Observable<Event>;
+  orientationSubscription$: Subscription;
 
   ngOnInit(): void {
+    
+    // resize app
+    this.resizeObservable$ = fromEvent(window, 'resize')
+    this.resizeSubscription$ = this.resizeObservable$.subscribe( evt => {
+      console.log('window -> resize');
+      
+      //reload page
+      this.router.navigateByUrl('/', {skipLocationChange: true}).then(()=>
+      this.router.navigate(['/drawingBoard']));
+    });
+
+    // screen.orientation.lock;
+    // this.orientationObservable$ = fromEvent(screen.orientation, 'change')
+    // this.orientationSubscription$ = this.resizeObservable$.subscribe( evt => {
+    //   console.log('screen orientation -> change');
+    //   screen.orientation.lock;
+    // });
   }
 
   ngOnDestroy() {
-    this.resizeSubscription$.unsubscribe()
+    this.resizeSubscription$.unsubscribe();
+    //this.orientationSubscription$.unsubscribe();
+    screen.orientation.unlock;
   }
 
   public ngAfterViewInit() {
@@ -75,19 +96,6 @@ export class DrawingBoardCanvasComponent implements OnInit, OnDestroy {
     this.cx.strokeStyle = '#000105';
 
     this.captureEvents(canvasEl);
-
-    // resize app
-    this.resizeObservable$ = fromEvent(window, 'resize')
-    this.resizeSubscription$ = this.resizeObservable$.subscribe( evt => {
-      console.log('window resize! 555!!');
-      //reload page
-      this.router.navigateByUrl('/', {skipLocationChange: true}).then(()=>
-      this.router.navigate(['/drawingBoard']));
-
-      // canvasEl.width = this.canvasElementView.nativeElement.offsetWidth;
-      // canvasEl.height = this.canvasElementView.nativeElement.offsetHeight;
-
-    });
   }
   
   private captureEvents(canvasEl: HTMLCanvasElement) {

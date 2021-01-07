@@ -7,6 +7,7 @@
 
 body {
     font: 100% $font-stack;
+    background: $color-blue-1;
     .shell-content {
       position: relative;
       top: calc(#{$main-header-height} + #{$main-header-padding});
@@ -16,6 +17,11 @@ body {
       height: $main-header-height;
       padding-top: $main-header-padding;
       padding-bottom: $main-header-padding;
+      .nav-item {
+        a.nav-link {
+          color: $color-blue-1;
+        }
+      }
     }
 }
 

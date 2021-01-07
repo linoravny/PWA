@@ -15,23 +15,25 @@ export class HomeComponent implements OnInit {
     config.pauseOnHover = false;  
   } 
 
-cards: any = [
+  title = "Home Page";
+  cards: any = [
     {
-      title: 'Paints',
-      img: 'https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(34).jpg'
-    },
-    {
-      title: 'Card Title 2',
-      img: 'https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(34).jpg'
-    },
-    {
-      title: 'Card Title 3',
-      img: 'https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(34).jpg'
+      title: 'Drawing Board',
+      img: './assets/drawingBoard.jpeg',
+      navigateUrl: '/drawingBoard'
     }
+    //,
+    // {
+    //   title: 'Card Title 2',
+    //   img: 'https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(34).jpg'
+    // },
+    // {
+    //   title: 'Card Title 3',
+    //   img: 'https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(34).jpg'
+    // }
   ];
 
   ngOnInit(): void {
-   
   }
 
 }
